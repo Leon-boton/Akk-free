@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина аккаунтов</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      background-color: #121212;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      margin: 10px 20px;
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .card p {
+      margin: 4px 0;
+    }
+
+ .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.ios-btn {
+  padding: 10px 10px;
+  font-size: 14px;
+  background-color: #2c2c2e;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-width: 50px; /* уменьшили ширину */
+  height: 40px;     /* увеличили высоту */
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.ios-btn:hover {
+  background-color: #3a3a3c;
+}
+    .center {
+      text-align: center;
+      margin-top: 30px;
+    }
+/* стиль фб */
+
+.fab-archive-container {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  z-index: 999;
+}
+
+.fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: white;
+  color: black;
+  font-size: 22px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.fab-archive-actions {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.fab-btn {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  color: black;
+  border: none;
+  font-size: 18px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fab-archive-container.open .fab-btn:nth-child(1) {
+  top: -120px;
+  right: 10px;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fab-archive-container.open .fab-btn:nth-child(2) {
+  top: -90px;
+  right: 60px;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fab-archive-container.open .fab-btn:nth-child(3) {
+  top: -30px;
+  right: 63px;
+  opacity: 1;
+  transform: scale(1);
+}
+  </style>
+</head>
+<body>
+
+  <h1><i class="fas fa-trash-alt"></i> Корзина аккаунтов</h1>
+
+  <div id="deletedList"></div>
+
+ <div class="button-group">
+ <div class="button-group">
+  <button class="ios-btn" onclick="clearDeleted()">Очистить корзину</button>
+  <button class="ios-btn" onclick="goBack()">Назад</button>
+</div>
+<!-- стиль фб  -->
+<div class="fab-archive-container">
+  <button class="fab-main" onclick="toggleFab()">×</button>
+  <div class="fab-archive-actions">
+      <button class="fab-btn" title="Восстановить всё" onclick="restoreAllDeleted()"><i class="fas fa-undo"></i></button>
+    <button class="fab-btn" title="Очистить корзину" onclick="clearDeleted()"><i class="fas fa-trash"></i></button>
+<button class="fab-btn" title="Назад" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+  </div>
+</div>
+  <script>
+// стиль фб
+function toggleFab() {
+  document.querySelector('.fab-archive-container').classList.toggle('open');
+}
+
+function goBack() {
+  history.back(); // или window.location.href = 'index.html';
+}
+
+function clearDeleted() {
+  if (confirm("Очистить корзину навсегда?")) {
+    localStorage.removeItem('trashAccounts');
+    location.reload();
+  }
+}
+function restoreAllDeleted() {
+  const trash = JSON.parse(localStorage.getItem("trashAccounts")) || [];
+  const accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+  if (trash.length === 0) {
+    alert("Корзина пуста");
+    return;
+  }
+
+  trash.forEach(acc => {
+    accounts.push({ ...acc, archived: false, active: false });
+  });
+
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+  localStorage.removeItem("trashAccounts");
+
+  // Переход на главную страницу
+  window.location.href = "index.html";
+}
+
+//стоп
+    const trashAccounts = JSON.parse(localStorage.getItem('trashAccounts')) || [];
+
+// пример рендера
+trashAccounts.forEach(acc => {
+  // выводим данные
+});
+
+    const container = document.getElementById('deletedList');
+    if (trashAccounts.length === 0) {
+  container.innerHTML = "<p class='center'>Корзина пуста.</p>";
+} else {
+  trashAccounts.forEach(acc => {
+
+     container.innerHTML += `
+  <div class="card">
+    <p><b>Логин:</b> ${acc.login}</p>
+    <p><b>Пароль:</b> ${acc.password}</p>
+    <p><b>Дата удаления:</b> ${acc.deletedAt || "—"}</p>
+    <button class="ios-btn" onclick="restoreAccount(${acc.id})">Восстановить</button>
+  </div>
+`;
+      });
+    }
+
+    function clearDeleted() {
+      if (confirm("Очистить корзину навсегда?")) {
+        localStorage.removeItem('deletedAccounts');
+        location.reload();
+      }
+    }
+
+function restoreAccount(id) {
+  const acc = trashAccounts.find(a => a.id === id);
+  if (!acc) return;
+
+  const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+  accounts.push({ ...acc, archived: false, active: false });
+  localStorage.setItem('accounts', JSON.stringify(accounts));
+
+  const updated = trashAccounts.filter(a => a.id !== id);
+  localStorage.setItem('trashAccounts', JSON.stringify(updated));
+
+  sessionStorage.setItem("restored", "true"); // флаг
+  window.location.href = "index.html"; // переход
+}
+  </script>
+<script>
+  function goBack() {
+    history.back();
+  }
+</script>
+</body>
+</html>

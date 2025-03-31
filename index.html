@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Контроль аккаунтов</title>
+<!-- иконки  -->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="face.css">
+
+</head>
+<body>
+<h2>КОНТРОЛЬ АККАУНТОВ</h2>
+<!--показ счетчик-->
+  <h3 id="counter" style="
+  background: #2c2c2e;
+  color: #f2f2f7;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px auto;
+  width: fit-content;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+">
+  Всего: 3 | Активных: 0 | Не активных: 3
+</h3>
+<div id="accountTable"></div>
+  <!-- Боковое меню -->
+<div id="sidebar">
+<!--стиль слова меню   -->
+<div style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px;
+">
+  <i class="fas fa-bars"></i>
+  <span>Меню</span>
+</div>
+  <ul>
+<li id="openCreateModal"><i class="fas fa-user-plus"></i> Создать аккаунт</li>
+    <li id="openGenerator"><i class="fas fa-bolt"></i> Генератор кодов</li>
+<li id="generateFakeStudent"><i class="fas fa-user-graduate"></i> Добавить студента</li>
+<li id="openAvito"><i class="fas fa-comment-dots"></i>Инстркция</li>
+<li onclick="window.location.href='gen.html'">
+  <i class="fas fa-image"></i> Инструкция PNG
+</li>  
+<li id="openStudentHistory"><i class="fas fa-user-clock"></i> История студентов</li>
+<li id="openHistory"><i class="fas fa-clock"></i> История</li>
+<li id="openStudentArchive">
+  <i class="fas fa-archive"></i> Архив студентов
+</li>
+
+<li onclick="window.location.href='deleted.html'" style="position: absolute; bottom: 60px; right: 20px;background: none;border: none;padding: 0; margin: 0;cursor: pointer;">
+  <i class="fas fa-trash-alt" style="font-size: 20px;"></i>
+</li>
+<!-- переход -->
+<li onclick="window.open('https://signin.k-state.edu/WebISO/login?service=https%3A%2F%2Feid.k-state.edu%2FeProfile%2Fsummary.do&logoutCallback=https://eid.k-state.edu/eProfile/logout&serviceName=eProfile', '_blank')"
+    style="position: absolute; bottom: 100px; right: 20px; background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+  <i class="fas fa-university" style="font-size: 20px;"></i>
+</li>
+  </ul>
+</div>
+
+<!-- Модальное окно -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h3>Создать аккаунт</h3>
+    <input type="text" id="newLogin" placeholder="Логин">
+    <input type="text" id="newPassword" placeholder="Пароль">
+   <button onclick="addAccount(); closeModal();">
+  Сохранить
+</button>
+  </div>
+</div>
+<!-- Модальное окно: Генератор паролей -->
+<div id="generatorModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeGeneratorModal">&times;</span>
+    <h3>Генератор пароля</h3>
+    <input type="text" id="password" placeholder="Сгенерированный пароль" readonly>
+
+<button id="generate-btn">
+  Генерировать
+</button>
+<button id="copy-btn">
+  Копировать
+</button>
+  </div>
+</div>
+<!-- Модалка: Сообщение клиенту -->
+<div id="avitoModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeAvitoModal">&times;</span>
+    <h3>Сообщение для клиента</h3>
+    <textarea id="clientText" readonly>
+По этой инструкции !При активаций для стабильности лучше применить VPN 
+
+П. 1
+— Заходим на iPhone в
+настройки
+Жмем Apple ID, ICloud, контент и покупки
+
+П.2
+— Выбираем подпункт
+Подписки
+
+П.3
+— Выбираем Apple Music и
+жмем см.все планы
+
+П.4
+— Выбираем подписку
+Студенческая
+
+П.5
+— Во вкладке Страна/регион выбираем страну
+! США !
+(в поиске можно по русски набрать штаты)
+
+— Во вкладке Учебное заведение в поиске пишем название университета
+
+KANSAS STATE UNIVERSITY
+
+П.6
+Вас перебросит на сайт
+университета.
+
+Скрин п.6 пункта нужно
+оправить вышлю elD и пароль
+    </textarea>
+   <button id="copyAndGoAvitoBtn" class="avito-button">
+  <img src="https://www.avito.ru/favicon.ico" alt="Avito" class="avito-icon">
+  Скопировать и открыть Авито
+</button>
+  </div>
+</div>
+<!-- Модалка истории -->
+<div id="historyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeHistoryModal">&times;</span>
+    <h3>История действий</h3>
+    <button id="clearHistoryBtn" class="clear-history">Очистить историю</button>
+<div id="historyLog"></div>
+  </div>
+</div>
+<!-- Модалка фейк-студента -->
+<div id="fakeModal" class="modal">
+  <div class="modal-content">
+    <span id="closeFakeModal" class="close">&times;</span>
+    <h3>Сгенерировать студентов</h3>
+   <button id="genFakeBtn">Сгенерировать</button>
+    <p id="fakeStatus" style="margin-top:10px;font-size:14px;color:#555;"></p>
+  </div>
+</div>
+<!-- История генерации студентов -->
+<div id="studentHistoryModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeStudentHistoryModal">&times;</span>
+    <h3>История студентов</h3>
+<button id="clearStudentHistoryBtn" class="clear-history">Очистить историю</button>
+    <div id="studentHistoryLog"></div>
+  </div>
+</div>
+
+<!-- Всплывающее уведомление -->
+<div id="toast" class="toast">Уведомление</div>
+
+<div class="alt-menu-btn" onclick="toggleSidebarAlt(this)">
+  <span></span>
+</div>
+
+<!--script-->
+<script src="face.js" defer></script>
+<script src="script.js" defer></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+</body>
+</html>
