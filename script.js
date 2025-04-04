@@ -2,9 +2,22 @@
 // батон новая
 function toggleSidebarAlt(btn) {
   const sidebar = document.getElementById('sidebar');
+  const fabContainers = document.querySelectorAll('.fab-archive-container, .fab-container'); // добавь все свои fab-контейнеры
+
   sidebar.classList.toggle('active');
   btn.classList.toggle('active');
+
+  fabContainers.forEach(fab => {
+    if (sidebar.classList.contains('active')) {
+      fab.classList.add('fab-hidden');
+    } else {
+      fab.classList.remove('fab-hidden');
+    }
+  });
+updateFabVisibility();
+
 }
+//!!!
 
 //всплывающие увед
 function showToast(message) {
@@ -81,6 +94,8 @@ function renderTable() {
 
     container.appendChild(fragment);
     attachFabListeners();
+updateFabVisibility();
+
     updateCounter();
   }, 30); // чуть-чуть задержка для эффекта и плавности
 }
@@ -145,6 +160,8 @@ function addAccount() {
     saveToLocal();
     renderTable();
 addToHistory(`➕ Добавлен аккаунт: ${login}`);
+updateFabVisibility(); // ← добавь эту строку сразу после renderTable
+//!!
 
     // Очистка полей
     document.getElementById('newLogin').value = '';
@@ -574,4 +591,15 @@ function restoreAccount(id) {
   localStorage.setItem('trashAccounts', JSON.stringify(trashAccounts));
 
   renderTrash();
+}
+
+// это 1!!!
+function updateFabVisibility() {
+  const sidebar = document.getElementById("sidebar");
+  const isMenuOpen = sidebar?.classList.contains("active");
+
+  // Ищем все .fab-container, которые есть на странице
+  document.querySelectorAll(".fab-container, .fab-archive-container").forEach(fab => {
+    fab.classList.toggle("fab-hidden", isMenuOpen);
+  });
 }
