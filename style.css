@@ -796,3 +796,13 @@ textarea#clientText {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+/* раб */
+#accountTable {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 10px;
+}
+.fab-hidden {
+  display: none !important;
+}
