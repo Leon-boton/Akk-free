@@ -212,13 +212,6 @@ trashAccounts.forEach(acc => {
       });
     }
 
-    function clearDeleted() {
-      if (confirm("Очистить корзину навсегда?")) {
-        localStorage.removeItem('deletedAccounts');
-        location.reload();
-      }
-    }
-
 function restoreAccount(id) {
   const acc = trashAccounts.find(a => a.id === id);
   if (!acc) return;
